@@ -2,12 +2,12 @@ const { decryptData } = require('../utils/decryptData');
 const userModel = require('../model/userSchema')
 
 const getClientIp=(req)=> {
-    const ip = req.headers['x-forwarded-for'] || // Standard header used by proxies
-               req.connection.remoteAddress ||   // Remote address of the request
-               req.socket.remoteAddress ||       // Fallback for newer versions of Node.js
-               (req.connection.socket ? req.connection.socket.remoteAddress : null); // Fallback for older versions of Node.js
+    const ip = req.headers['x-forwarded-for'] || 
+               req.connection.remoteAddress ||   
+               req.socket.remoteAddress ||      
+               (req.connection.socket ? req.connection.socket.remoteAddress : null); 
     return ip;
-  }
+}
 
 const getUserData = async (user_id) => {
     const strUserId = user_id.toString();
@@ -15,7 +15,8 @@ const getUserData = async (user_id) => {
       { $match: { user_id: strUserId } },
       {
         $project: {
-            my_wallet_checked : 0
+            is_unique_ip_user: 0,
+            ip_address : 0
         },
       },
     ]);
@@ -25,7 +26,6 @@ const getUserData = async (user_id) => {
 const fetchUser= async(req,res)=>{
     try {
         const { encryptedData } = req.body 
-        // console.log('req.body', req.body);
 
         if(!encryptedData){
             return res.status(400).json({ error: 'Unauthorized access!' });
@@ -37,7 +37,6 @@ const fetchUser= async(req,res)=>{
         const { user_id, username, first_name } = decryptedData
 
         const user = await getUserData(user_id);
-        // console.log(user , 'user');
         
         console.log('decryptedData :',decryptedData );
         
@@ -58,7 +57,7 @@ const fetchUser= async(req,res)=>{
                 user_name: (username && username!='null') ? username : 'Unknown',
                 first_name,
                 join_date: Date.now(),
-                is_valid_user: is_valid_user,
+                is_unique_ip_user: is_valid_user,
                 ip_address : userIp
             });
             
@@ -71,6 +70,8 @@ const fetchUser= async(req,res)=>{
         return res.status(500).json({ error: 'Internal Server Error' });
     }    
 }
+
+
 
 module.exports = {
     fetchUser

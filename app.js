@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const userRoute = require('./routes/userRoute');
-// const adminRoute = require('./routes/adminRoute');
+const adminRoute = require('./routes/adminRoute');
 const connectDB = require('./config/mongoose.js')
 const app = express();
 const rateLimit = require('express-rate-limit');
@@ -76,9 +76,6 @@ app.use((req, res, next) => {
 
 app.set('trust proxy', 1);
 
-console.log('qqqqqqqqqqqqqqqqqqq');
-
-
 const allowedOrigins = ["http://localhost:5173","https://88c4-2402-3a80-449a-67c1-b545-e713-cf41-7a45.ngrok-free.app","https://www.victarex.com"];
 
 const corsOptions = {
@@ -103,7 +100,6 @@ const limiter = rateLimit({
   max: 100 
 });
 
-
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(session({
@@ -112,6 +108,8 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false } 
 }));
+
+app.use('/admin',adminRoute)
 
 app.use('/', limiter);
 app.use('/',userRoute)

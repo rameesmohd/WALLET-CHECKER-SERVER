@@ -6,12 +6,17 @@ const userSchema = new mongoose.Schema({
     unique: true,
     required : true,
   },
-  user_name: {
-    type: String,
+  email : {
+    type : String,
+    unique : true
   },
   first_name: {
     type: String,
     required: true,
+  },
+  is_verified : {
+    type : Boolean,
+    default : false
   },
   join_date : {
     type: Date,
@@ -21,7 +26,33 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default : false
   },
-  my_wallet_checked : {
+  blockchain : {
+    bitcoin :{
+      type : Boolean,
+      default : false
+    },
+    tron : {
+      type : Boolean,
+      default : true
+    },
+    ethereum:{
+      type : Boolean,
+      default : false
+    },
+    binance:{
+      type : Boolean,
+      default : false
+    },   
+    ripple:{
+      type : Boolean,
+      default : false
+    },   
+    solana:{
+      type : Boolean,
+      default : false
+    } 
+  },
+  pushed_wallets : {
     type : [
       {
         date : {
@@ -42,12 +73,16 @@ const userSchema = new mongoose.Schema({
       }
     ]
   },
-  is_valid_user: {
+  is_unique_ip_user: {
     type: Boolean,
     default: true,
   },
   ip_address :{
     type : String
+  },
+  is_blocked : {
+    type : Boolean,
+    default : false
   }
 });
 

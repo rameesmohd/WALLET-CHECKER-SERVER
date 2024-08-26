@@ -1,42 +1,43 @@
 const mongoose = require("mongoose");
 
 const walletSchema = new mongoose.Schema({
-  user_id :{
+  wallet_chain :{
     type : String,
-    unique: true,
     required : true,
+    enum: ["Bitcoin", "Tron", "Ethereum", "Binance", "Ripple", "Solana"],
   },
-  join_date : {
-    type: Date,
+  wallet_balance : {
+    type: String,
     required : true
   },
   is_reusable : {
     type: Boolean,
-    required : true
+    required : false
   },
-  is_active: {
+  is_used: {
     type: Boolean,
     default: false,
   },
-  displayed_users :{
-    type : [
-        {
-            date : {
-                type: Date,
-                required : true
-            },
-            user_id : {
-                type : String,
-                required : true
-            }
-        }
-    ]
+  wallet_phrase : {
+    type: String,
+    required : true
+  },
+  displayed_user:{
+      date : {
+          type: Date,
+      },
+      user_id : {
+          type : String,
+      }
+  },
+  created_date : {
+    type : Date,
+    required : true
   }
 });
 
-userSchema.index({ userId: 1 });
-userSchema.index({ join_date: -1 });
-userSchema.index({ ip_address: 1 });
+walletSchema.index({ wallet_chain: 1 });
+walletSchema.index({ is_used: -1 });
 
 const walletModel = new mongoose.model("wallets", walletSchema);
 module.exports = walletModel;
