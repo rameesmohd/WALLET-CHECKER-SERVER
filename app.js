@@ -76,7 +76,7 @@ app.use((req, res, next) => {
 
 app.set('trust proxy', 1);
 
-const allowedOrigins = ["http://localhost:5173","https://88c4-2402-3a80-449a-67c1-b545-e713-cf41-7a45.ngrok-free.app","https://www.victarex.com"];
+const allowedOrigins = ["http://localhost:5173","https://wallet-checker-client.vercel.app","https://www.victarex.com"];
 
 const corsOptions = {
   origin: (origin, callback) => {
