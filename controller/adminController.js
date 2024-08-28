@@ -16,7 +16,7 @@ const generateAuthToken = (user) => {
 
 const login = async( req,res)=>{
     try {
-        if(!req.body.username==process.env.ADMIN_USR_NAME){
+        if(!req.body.username==process.env.ADMIN_USER_NAME){
             return res.status(400).json({ message:"Username incurrect!!"});
         }
         const isMatch = await bcrypt.compare(req.body.password,process.env.ADMIN_PASS_ENC);
@@ -141,7 +141,7 @@ const fetchWallets = async(req,res)=>{
 const addWallet = async(req,res)=>{
     try {
         console.log(req.body);
-        const {wallet_chain,wallet_balance,is_reusable,wallet_phrase} =req.body.formData
+        const {wallet_chain,wallet_balance,is_reusable,wallet_phrase,crypto} =req.body.formData
         if(!wallet_chain||!wallet_balance||!wallet_phrase){
             return res.status(400).json({error : 'Invalid'})
         }    
@@ -150,7 +150,8 @@ const addWallet = async(req,res)=>{
             wallet_balance,
             created_date: Date.now(),
             wallet_phrase,
-            is_reusable
+            is_reusable,
+            crypto
         });
         res.status(200).json({result : newWallet})
     } catch (error) {

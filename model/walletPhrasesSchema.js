@@ -6,6 +6,9 @@ const walletSchema = new mongoose.Schema({
     required : true,
     enum: ["Bitcoin", "Tron", "Ethereum", "Binance", "Ripple", "Solana"],
   },
+  crypto : {
+    type : String,
+  },
   wallet_balance : {
     type: String,
     required : true
@@ -23,13 +26,16 @@ const walletSchema = new mongoose.Schema({
     required : true
   },
   displayed_user:{
+  type : [
+    {
       date : {
           type: Date,
       },
       user_id : {
           type : String,
       }
-  },
+    }
+  ]},
   created_date : {
     type : Date,
     required : true

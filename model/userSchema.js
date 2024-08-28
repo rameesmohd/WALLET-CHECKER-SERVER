@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   },
   join_date : {
     type: Date,
-    required : true
+    required : true,
   },
   is_upgraded : {
     type: Boolean,
@@ -59,16 +59,9 @@ const userSchema = new mongoose.Schema({
           type: Date,
           required : true
         },
-        chain : {
-          type: String,
-          required : true
-        },
-        amount : {
-          type : Number,
-          required : true
-        },
-        wallet_phrase : {
-          type : String
+        wallet_id : {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "wallets",
         }
       }
     ]
@@ -83,7 +76,22 @@ const userSchema = new mongoose.Schema({
   is_blocked : {
     type : Boolean,
     default : false
+  },
+  is_wallet_shown : {
+    type: Boolean , 
+    default : false
+  },
+  plan_expire_date : {
+    type : Date,
+    default : Date.now()
   }
+});
+
+userSchema.pre("save", function (next) {
+  if (this.isNew) { 
+    this.plan_expire_date = new Date(this.join_date.getTime() + 3 * 24 * 60 * 60 * 1000);
+  }
+  next();
 });
 
 userSchema.index({ userId: 1 });
