@@ -67,6 +67,8 @@ app.use((req, res, next) => {
     }
   }
 
+  console.log(req.path);
+  
   if (req.path.startsWith('/admin')) {
     return next();
   }
