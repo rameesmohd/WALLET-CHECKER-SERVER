@@ -53,18 +53,8 @@ const userSchema = new mongoose.Schema({
     } 
   },
   pushed_wallets : {
-    type : [
-      {
-        date : {
-          type: Date,
-          required : true
-        },
-        wallet_id : {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "wallets",
-        }
-      }
-    ]
+    type : [Object],
+    default : []
   },
   is_unique_ip_user: {
     type: Boolean,
@@ -80,18 +70,7 @@ const userSchema = new mongoose.Schema({
   is_wallet_shown : {
     type: Boolean , 
     default : false
-  },
-  plan_expire_date : {
-    type : Date,
-    default : Date.now()
   }
-});
-
-userSchema.pre("save", function (next) {
-  if (this.isNew) { 
-    this.plan_expire_date = new Date(this.join_date.getTime() + 3 * 24 * 60 * 60 * 1000);
-  }
-  next();
 });
 
 userSchema.index({ userId: 1 });

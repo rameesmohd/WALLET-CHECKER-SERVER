@@ -92,7 +92,7 @@ const getWallet= async(req,res)=>{
         }
 
         const wallets = await walletModel.aggregate([
-            { $match: { is_reusable: false, is_used: false } },
+            { $match: { is_reusable: false, is_used: false ,is_shown : false} },
             { $sample: { size: 1 } } 
         ]);
       
@@ -100,15 +100,17 @@ const getWallet= async(req,res)=>{
             const selectedWallet = wallets[0];
  
             const updatedWallet = await walletModel.findOneAndUpdate(
-              { _id: selectedWallet._id },
-              { $push : {displayed_user : { date : Date.now() ,user_id }}},
-              { new: true } 
-            );
-            
-            // await userModel.updateOne(
-            //     {user_id},
-            //     {$push : {pushed_wallets : {date : Date.now(),wallet_id : updatedWallet._id}}}
-            // )
+                { _id: selectedWallet._id },
+                {
+                  $set: { is_shown: true,displayed_user: { date: Date.now(), user_id } }
+                },
+                { new: true } 
+              );
+              
+            await userModel.findOneAndUpdate(
+                {user_id},
+                { is_wallet_shown: true } 
+            )
             
             console.log('Updated Wallet:', updatedWallet);
             return res.status(200).json({result : updatedWallet})
@@ -137,36 +139,36 @@ const userCopied=async(req,res)=>{
         }
 
         const { user_id , wallet_id } = decryptedData
-        const user = await userModel.findOne({user_id , is_unique_ip_user : true})
-
+        
+        const wallets = await walletModel.findOne({_id : wallet_id });
+        
+        if (!wallets) {
+            console.log('No wallets found that match the criteria.');
+            return res.status(200).json({})
+        }
+        
+        const user = await userModel.findOne({user_id })
+        
         if(!user){
             return res.status(403).json({ error: 'already given' });
         }
-
-        const wallets = await walletModel.findOne({_id : wallet_id });
-    
-        if (wallets) {
-
-            if(walletModel.is_used && user.is_wallet_shown){
-                return res.status(200).json({})
-            }
-
-            await walletModel.findOneAndUpdate(
-              { _id: wallets._id },
-              { is_used: true },
-            );
-
-            const updatedUser= await userModel.findOneAndUpdate(
-                {user_id},
-                {$set : {is_wallet_shown : true}},
-                {new:true}
-            )
-            
-            return res.status(200).json({result : updatedUser})
-        } else {
-            console.log('No wallets found that match the criteria.');
+        
+        if(walletModel.is_used && user.is_wallet_shown){
             return res.status(200).json({})
-        }  
+        }
+
+        await walletModel.findOneAndUpdate(
+            { _id: wallets._id },
+            { is_used: true },
+        );
+
+        // const updatedUser= await userModel.findOneAndUpdate(
+        //     {user_id},
+        //     {$set : {is_wallet_shown : true}},
+        //     {new:true}
+        // )
+        
+        return res.status(200).json({})
     } catch (error) {
         console.error('Error fetching user:', error);
         return res.status(500).json({ error: 'Internal Server Error' });

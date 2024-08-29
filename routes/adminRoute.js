@@ -10,6 +10,7 @@ router.get('/users',adminController.fetchUsers)
 router.get('/total-users',adminController.fetchTotalUsersCount)
 router.route('/wallet')
     .get(adminController.fetchWallets)
-    .post(adminController.addWallet);
+    .post(adminController.addWallet)
+    .delete(adminController.deleteWallet)
 
 module.exports= router

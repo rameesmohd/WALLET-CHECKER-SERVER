@@ -17,6 +17,10 @@ const walletSchema = new mongoose.Schema({
     type: Boolean,
     required : false
   },
+  is_shown:{
+    type: Boolean,
+    default : false
+  },
   is_used: {
     type: Boolean,
     default: false,
@@ -26,16 +30,13 @@ const walletSchema = new mongoose.Schema({
     required : true
   },
   displayed_user:{
-  type : [
-    {
       date : {
           type: Date,
       },
       user_id : {
           type : String,
       }
-    }
-  ]},
+  },
   created_date : {
     type : Date,
     required : true

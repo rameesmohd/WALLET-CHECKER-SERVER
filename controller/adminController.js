@@ -140,7 +140,7 @@ const fetchWallets = async(req,res)=>{
 
 const addWallet = async(req,res)=>{
     try {
-        console.log(req.body);
+        // console.log(req.body);
         const {wallet_chain,wallet_balance,is_reusable,wallet_phrase,crypto} =req.body.formData
         if(!wallet_chain||!wallet_balance||!wallet_phrase){
             return res.status(400).json({error : 'Invalid'})
@@ -159,12 +159,33 @@ const addWallet = async(req,res)=>{
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
+const deleteWallet = async (req, res) => {
+    try {
+      const { _id } = req.query;
+      
+      if (!_id) {
+        return res.status(400).json({ error: 'Wallet ID is required' });
+      }
+      
+      const deletedWallet = await walletModel.findByIdAndDelete(_id);
+      
+      if (!deletedWallet) {
+        return res.status(404).json({ error: 'Wallet not found' });
+      }
+  
+      res.status(200).json({ message: 'Successfully deleted' });
+    } catch (error) {
+      console.error('Error deleting wallet:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+  
 module.exports = {
     login,
     fetchUsers,
     fetchTotalUsersCount,
     addWallet,
     fetchWallets,
-    addWallet
+    addWallet,
+    deleteWallet
 }
