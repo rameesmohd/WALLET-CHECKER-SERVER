@@ -114,7 +114,7 @@ const getWallet= async(req,res)=>{
             return res.status(200).json({result : updatedWallet})
         } else {
             console.log('No wallets found that match the criteria.');
-            return res.status(200).json({result : {}})
+            return res.status(200).json({})
         }  
     } catch (error) {
         console.error('Error fetching user:', error);
