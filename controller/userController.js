@@ -144,8 +144,13 @@ const userCopied=async(req,res)=>{
         }
 
         const wallets = await walletModel.findOne({_id : wallet_id });
-        
+    
         if (wallets) {
+
+            if(walletModel.is_used && user.is_wallet_shown){
+                return res.status(200).json({})
+            }
+
             await walletModel.findOneAndUpdate(
               { _id: wallets._id },
               { is_used: true },
