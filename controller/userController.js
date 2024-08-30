@@ -74,7 +74,7 @@ const getWallet= async(req,res)=>{
         }
 
         const decryptedData =await decryptData(encryptedData)
-        console.log(decryptedData);
+        // console.log(decryptedData);
         
         if (!decryptedData || !decryptedData.user_id ) {
             return res.status(400).json({ error: 'Invalid decryption.' });
@@ -95,7 +95,7 @@ const getWallet= async(req,res)=>{
             { $match: { is_reusable: false, is_used: false ,is_shown : false} },
             { $sample: { size: 1 } } 
         ]);
-      
+        // console.log(wallets);
         if (wallets.length > 0) {
             const selectedWallet = wallets[0];
  

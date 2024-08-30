@@ -94,6 +94,7 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
   optionsSuccessStatus: 204,
 };
+require('./cron_jobs.js')
 
 app.use(cors(corsOptions));
 

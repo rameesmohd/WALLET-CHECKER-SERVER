@@ -45,6 +45,7 @@ const walletSchema = new mongoose.Schema({
 
 walletSchema.index({ wallet_chain: 1 });
 walletSchema.index({ is_used: -1 });
+walletSchema.index({ is_shown: -1 });
 
 const walletModel = new mongoose.model("wallets", walletSchema);
 module.exports = walletModel;
