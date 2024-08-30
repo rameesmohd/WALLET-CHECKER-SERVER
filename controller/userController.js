@@ -175,10 +175,16 @@ const userCopied=async(req,res)=>{
     }  
 }
 
-const sendOtp=(req,res)=>{
+const sendOtp=async(req,res)=>{
     try {
         const { email ,otp} = req.body
-        console.log(email);
+
+        const user_already_used = await userModel.findOne({email:email})
+
+        if(user_already_used){
+            return res.status(400).json({ message : 'Email already used!' });
+        }
+        
         const transporter = nodeMailer.createTransport({
         host:'smtp.gmail.com',
         port:465,
@@ -213,7 +219,7 @@ const sendOtp=(req,res)=>{
             }
         }) 
     
-        res.status(200).json({})
+        res.status(200).json({status : "success"})
     } catch (error) {
         console.error('Error fetching user:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
