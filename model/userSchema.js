@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   },
   email : {
     type : String,
+    set: v => v.toLowerCase()
   },
   first_name: {
     type: String,
@@ -72,10 +73,10 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+userSchema.index({ email: 1 }, { unique: true, sparse: true });
 userSchema.index({ userId: 1 });
 userSchema.index({ join_date: -1 });
 userSchema.index({ ip_address: 1 });
-userSchema.index({ email: 1 }, { unique: true, sparse: true });
 
 const userModel = new mongoose.model("users", userSchema);
 module.exports = userModel;
