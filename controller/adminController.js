@@ -38,14 +38,13 @@ const fetchUsers=async(req,res)=>{
 
         const searchQuery = {
             $or: [
-            { user_id: { $regex: new RegExp(search, 'i') } }, 
             { username: { $regex: new RegExp(search, 'i') } }, 
             { first_name : { $regex: new RegExp(search, 'i') } }, 
             ]
         }
 
         const query = {
-            ...(search !=='' && (isNaN(Number(search)) ? searchQuery : { userId: Number(search) })),
+            ...(search !=='' && (isNaN(Number(search)) ? searchQuery : { user_id: Number(search) })),
             
         }
 
