@@ -38,6 +38,7 @@ const fetchUsers=async(req,res)=>{
 
         const searchQuery = {
             $or: [
+            { user_id: { $regex: new RegExp(search, 'i') } }, 
             { username: { $regex: new RegExp(search, 'i') } }, 
             { first_name : { $regex: new RegExp(search, 'i') } }, 
             ]
