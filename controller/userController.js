@@ -32,7 +32,7 @@ const fetchUser= async(req,res)=>{
         }
         const { user_id, first_name } = decryptedData
 
-        const user = await getUserData(user_id);
+        const user = await userModel.findOne({ user_id });
         
         if (!user) {
             const userIp = getClientIp(req)
@@ -46,13 +46,15 @@ const fetchUser= async(req,res)=>{
                 is_unique_ip_user = false
             }
 
-            const newUser = await userModel.create({
+            const newUser = new userModel({
                 user_id,
                 first_name,
                 join_date: Date.now(),
                 is_unique_ip_user,
-                ip_address : userIp
+                ip_address: userIp,
             });
+
+            await newUser.save(); 
             
             return res.status(201).json({data: newUser});
         } else {
