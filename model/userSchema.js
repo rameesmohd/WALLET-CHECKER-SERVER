@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     required : true,
   },
+  start_date : {
+    type: Date,
+    default :Date.now
+  },
   is_upgraded : {
     type: Boolean,
     default : false

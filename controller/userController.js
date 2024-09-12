@@ -246,7 +246,7 @@ const verifyUser = async(req,res)=>{
 
         const verifiedUser = await userModel.findOneAndUpdate(
             {user_id},
-            {$set : {is_verified : true,email : email }},
+            {$set : {is_verified : true,email : email,start_date : Date.now()}},
             {new : true}
         )
 
