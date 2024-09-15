@@ -45,12 +45,6 @@ const blockedIPs = new Set();
 app.use((req, res, next) => {
   const userIp = req.ip || req.socket.remoteAddress;
   const userAgent = req.headers['user-agent'] || '';
-  
-  if (req.path === '/') {
-    blockedIPs.add(userIp);
-    console.log(`IP blocked due to '/' suspicious activity. ${userIp}`);
-    return res.status(403).send('Access blocked.');
-  }
 
   if (blockedIPs.has(userIp)) {
     return res.status(403).send('Access blocked.');
